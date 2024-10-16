@@ -2,11 +2,11 @@ import { Router } from 'express';
 import { celebrate, Joi, Segments } from 'celebrate';
 import UserController from '../controllers/UsersController';
 
-const userRoutes = Router();
-const userController = new UserController();
+const usersRoutes = Router();
+const usersController = new UserController();
 
-userRoutes.get('/', userController.index);
-userRoutes.post(
+usersRoutes.get('/', usersController.index);
+usersRoutes.post(
   '/',
   celebrate({
     [Segments.BODY]: {
@@ -15,5 +15,7 @@ userRoutes.post(
       password: Joi.string().required(),
     },
   }),
-  userController.create,
+  usersController.create,
 );
+
+export default usersRoutes;
