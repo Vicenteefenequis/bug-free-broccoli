@@ -43,7 +43,6 @@ export default class EtherealMail {
       }
     })
 
-
     const message = await transporter.sendMail({
       from: {
         name: from?.name || 'Equipe API Vendas',
