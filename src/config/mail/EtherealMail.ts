@@ -13,7 +13,7 @@ interface ITemplateVariable {
 }
 
 interface IParseMailTemplate {
-  template: string;
+  file: string;
   variables: ITemplateVariable
 }
 
@@ -42,6 +42,7 @@ export default class EtherealMail {
         pass: account.pass
       }
     })
+
 
     const message = await transporter.sendMail({
       from: {
