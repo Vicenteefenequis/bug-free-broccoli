@@ -1,10 +1,9 @@
-
 import { getCustomRepository } from 'typeorm';
 import AppError from '@shared/errors/AppError';
 import UsersRepositories from '../typeorm/repositories/UsersRepositories';
 import UserTokensRepository from '../typeorm/repositories/UserTokensRepository';
 import EtherealMail from '@config/mail/EtherealMail';
-import path from "path"
+import path from 'path';
 
 interface IRequest {
   email: string;
@@ -12,17 +11,21 @@ interface IRequest {
 
 class SendForgotPasswordEmailService {
   public async execute({ email }: IRequest): Promise<void> {
-
     const usersRepository = getCustomRepository(UsersRepositories);
-    const userTokenRepository = getCustomRepository(UserTokensRepository)
+    const userTokenRepository = getCustomRepository(UserTokensRepository);
 
     const user = await usersRepository.findByEmail(email);
 
     if (!user) throw new AppError('User not found');
 
-    const token = await userTokenRepository.generate(user.id)
+    const token = await userTokenRepository.generate(user.id);
 
-    const forgotPasswordTemplate = path.resolve(__dirname, '..', 'views', 'forgot_password.hbs')
+    const forgotPasswordTemplate = path.resolve(
+      __dirname,
+      '..',
+      'views',
+      'forgot_password.hbs',
+    );
     await EtherealMail.sendMail({
       to: {
         name: user.name,
@@ -33,10 +36,10 @@ class SendForgotPasswordEmailService {
         file: forgotPasswordTemplate,
         variables: {
           name: user.name,
-          link: `http://localhost:3000/reset_password?token=${token?.token}`
-        }
-      }
-    })
+          link: `${process.env.APP_API_URL}/reset_password?token=${token?.token}`,
+        },
+      },
+    });
   }
 }
 
