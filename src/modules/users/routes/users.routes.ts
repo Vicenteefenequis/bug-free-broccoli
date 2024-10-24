@@ -27,7 +27,7 @@ usersRoutes.post(
 usersRoutes.patch(
   '/avatar',
   isAuthenticated,
-  multer(uploadConfig).single('avatar'),
+  multer(uploadConfig.multer).single('avatar'),
   userAvatarController.update,
 );
 
